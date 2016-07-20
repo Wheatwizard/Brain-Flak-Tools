@@ -2,6 +2,7 @@ from basics import *
 import re
 
 def reducableModifiers(snippet):
+	#Finding problem
 	finder = re.compile("(\[<|<\[).*(\]>|>\])")
 	matches = re.finditer(finder, snippet)
 	matches = filter(lambda x:balanced(snippet[x.span()[0]:x.span()[1]]),matches)

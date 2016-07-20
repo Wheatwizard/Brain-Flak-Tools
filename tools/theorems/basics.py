@@ -102,3 +102,15 @@ def cleanup(snippet):
 	snippet = snippet.replace("{}","{A}")
 	snippet = snippet.replace("()","(CC)")
 	return snippet
+
+'''
+Takes a snippet of code and decides if it returns zero or an unknown
+'''
+
+def zeroEval(snippet):
+	assert balanced(snippet)
+	#Any code in between "<" and ">" will be zeroed and is irrelevant
+	snippet = re.sub("<.>","CC",snippet)
+	#TODO perhaps add pop intellegence so that pops after a loop (always zero) are ignored
+	#We will permit monads and "C" because they do not change the value
+	return re.search("[^\(\)\{\}<>\[\]C]",snippet) == None

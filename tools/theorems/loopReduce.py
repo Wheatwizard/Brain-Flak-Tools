@@ -14,16 +14,23 @@ def topStack(snippet,start = "Unknown"):
 	#This could be a bit more advanced in figuring out the state of the top of the stack
 	result = []
 	current = start
-	snippet = snippet.replace("(CC)","GGGF")
-	for character in snippet:
+	for key, character in enumerate(snippet):
 		result.append(current)
 		if character == "{":
 			current = "Not Zero"
-		elif character == "}" or character == "F":
+		elif character == "}":
 			current = "Zero"
-		elif character in ["B",")","C"]:
+		elif character in ["B","C"]:
 			current = "Unknown"
-	snippet = snippet.replace("GGGF","(CC)")
+		elif character == ")":
+			enclosed = snippet[findMatch(snippet,key):key+1]
+			if zeroEval(enclosed): #If ths parenthesis pushes a zero
+				current = "Zero"
+			elif re.match("^\(*B\)*$",enclosed): #If this parentesis closes a duplication
+				#The top of the stack is whatever it was before duplication began
+				current = result[-len(enclosed)]
+			else:
+				current = "Unknown"
 	return zip(result,snippet)
 
 '''

@@ -6,6 +6,7 @@ Find all of the matches that are reducable
 '''
 
 def reducableNegatives(snippet):
+	#Finding problem
 	matches = re.finditer("\[[^\[]*\[",snippet)
 	#Matches that are balanced between the "["s are reduceable
 	valid = lambda x: balanced(snippet[x.span()[0]+1:x.span()[1]-1])
