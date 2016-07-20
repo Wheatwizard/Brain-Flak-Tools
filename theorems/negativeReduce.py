@@ -6,14 +6,24 @@ Find all of the matches that are reducable
 '''
 
 def reducableNegatives(snippet):
-	#Finding problem
 	matches = re.finditer("\[[^\[]*\[",snippet)
 	#Matches that are balanced between the "["s are reduceable
 	valid = lambda x: balanced(snippet[x.span()[0]+1:x.span()[1]-1])
 	return filter(valid,matches)
 
 '''
-TODO: Add description
+NegativeReduce cancels out negative modifiers
+
+A negative within a negative is the same as a positive
+e.g.
+
+([[()]]) --> (())
+
+Other more complicated cancelations can be done as well
+e.g.
+
+([[{}]()]) --> ({}[()])
+
 '''
 
 def negativeReduce(snippet):
