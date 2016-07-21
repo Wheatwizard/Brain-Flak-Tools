@@ -116,5 +116,10 @@ def zeroEval(snippet):
 	#Any code in between "<" and ">" will be zeroed and is irrelevant
 	snippet = re.sub("<.*>","CC",snippet)
 
+	#Remove all pushes because they cannot interfere with the value of the statement
+	snippet = re.sub("[\(\)]","",snippet)
+
+	#TODO use value Reduce and percolate
+
 	#We will permit monads, "C", and "F" because they do not change the value
 	return re.search("[^\(\)\{\}<>\[\]CF]",snippet) == None
