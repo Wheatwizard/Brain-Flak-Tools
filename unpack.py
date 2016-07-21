@@ -86,6 +86,7 @@ if __name__ == "__main__":
 	outfile = open(commandLineArgs[2],"w")
 	
 	string = infile.read()
+	infile.close()
 
 	#First we get rid of any formatting that may already exist
 	string = re.sub("[^\(\){}\[\]<>]",'',string)
@@ -96,4 +97,3 @@ if __name__ == "__main__":
 	
 	#Close all the files
 	outfile.close()
-	infile.close()
