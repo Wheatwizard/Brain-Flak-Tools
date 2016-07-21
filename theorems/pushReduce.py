@@ -9,7 +9,10 @@ This will return a list of pushes that are reducable
 
 def reducablePushes(snippet):
 	zeroData = zeroReturn(snippet)
-	return filter(lambda x: zeroData[x.span()[0]][0],re.finditer("\)[\(<\[AD]*B",snippet))
+	finder = re.compile("\)[\(<\[AD]*B")
+	#A find is valid if it is in a zero returning scope or if the push was zero
+	valid = lambda x: zeroData[x.span()[0]][0] or zeroEval(snippet[findMatch(snippet,x.span()[0])+1:x.span()[0]])
+	return filter(valid,re.finditer(finder,snippet))
 
 '''
 pushReduce takes pops that occur after a push and reduces them into a single expression
@@ -20,10 +23,13 @@ it is the same as pushing one to the stack twice "((()))"
 
 (())(({})) --> ((()))
 
-This only works if the push is in a zeroReturn scope
+This only works if the push is in a zeroReturn scope or if the last push was zero
 
 e.g.
 ((())(({}))) --> ((())(({})))
+
+((<>)(({}))) --> (((<>)))
+
 '''
 
 def pushReduce(snippet):
