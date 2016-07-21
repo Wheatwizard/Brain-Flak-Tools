@@ -10,7 +10,7 @@ def reducableModifiers(snippet):
 	pattern = "<" #Matches the opening brace for a "<>" or "[]" monad
 	return filter(
 		#If the code from the open to its match is nonzero it is filtered out
-		lambda x:zeroEval(snippet[x.span()[0]:findMatch(snippet,x.span()[0])+1]),
+		lambda x:zeroEval(snippet[x.span()[0]+1:findMatch(snippet,x.span()[0])]),
 		re.finditer(pattern,snippet)
 	)
 

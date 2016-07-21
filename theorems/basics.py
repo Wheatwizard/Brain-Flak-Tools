@@ -109,8 +109,12 @@ Takes a snippet of code and decides if it returns zero or an unknown
 
 def zeroEval(snippet):
 	assert balanced(snippet)
+
+	#Pops after a loop (always zero) are ignored
+	snippet = re.sub("B(?=[^B\)C]*\})","F",snippet[::-1])[::-1] #We denote zeroed pops with an "F"
+
 	#Any code in between "<" and ">" will be zeroed and is irrelevant
-	snippet = re.sub("<.>","CC",snippet)
-	#TODO perhaps add pop intellegence so that pops after a loop (always zero) are ignored
-	#We will permit monads and "C" because they do not change the value
-	return re.search("[^\(\)\{\}<>\[\]C]",snippet) == None
+	snippet = re.sub("<.*>","CC",snippet)
+
+	#We will permit monads, "C", and "F" because they do not change the value
+	return re.search("[^\(\)\{\}<>\[\]CF]",snippet) == None
