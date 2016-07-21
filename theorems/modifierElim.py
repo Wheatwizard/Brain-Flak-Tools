@@ -7,7 +7,7 @@ reducableModifiers finds all the modifiers (it can) attempting to modify a zeroe
 
 def reducableModifiers(snippet):
 	#Regex for all modifiers, filter out the unbalanced matches, and filter out the irreducable matches
-	pattern = "((?=(<.*>|\[.*\])).)" #Matches the opening brace for a "<>" or "[]" monad
+	pattern = "<" #Matches the opening brace for a "<>" or "[]" monad
 	return filter(
 		#If the code from the open to its match is nonzero it is filtered out
 		lambda x:zeroEval(snippet[x.span()[0]:findMatch(snippet,x.span()[0])+1]),
