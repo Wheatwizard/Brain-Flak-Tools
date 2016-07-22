@@ -20,11 +20,7 @@ swapPercolate helps to clump swaps together so that they can be dealt with by sw
 '''
 
 def swapPercolate(snippet):
-	snippet = snippet.replace("(C)","a")
-	snippet = snippet.replace("<C>","c")
-	snippet = snippet.replace("[C]","d")
-	
-	while re.search("[\(\[<]C",snippet):
+	while re.search("[\(\[<]C[^\)\}>\}]",snippet):
 		snippet = snippet.replace("(C)","a")
 		snippet = snippet.replace("<C>","c")
 		snippet = snippet.replace("[C]","d")
@@ -32,11 +28,12 @@ def swapPercolate(snippet):
 		snippet = snippet.replace("[C","C[")
 		snippet = snippet.replace("<C","C<")
 
+	snippet = snippet.replace("a","(C)")
+	snippet = snippet.replace("c","<C>")
+	snippet = snippet.replace("d","[C]")
+
 	while re.search("[\]>]C",snippet):
 		snippet = snippet.replace(">C","C>")
 		snippet = snippet.replace("]C","C]")
 
-	snippet = snippet.replace("a","(C)")
-	snippet = snippet.replace("c","<C>")
-	snippet = snippet.replace("d","[C]")
 	return snippet

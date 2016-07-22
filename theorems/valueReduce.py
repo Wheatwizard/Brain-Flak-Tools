@@ -23,7 +23,7 @@ def getSimpleSequence(value):
 	if value < 0:
 		return "["+getSequence(-value)+"]"
 	if value == 0:
-		return "<><>"
+		return "<()>"
 	if value <= 5:
 		#For values less than or equal to four cannot be expressed more simply than n*"()" 
 		return "()" * value
@@ -49,7 +49,7 @@ def getSequence(value):
 	if value < 0:
 		return "["+getSequence(-value)+"]"
 	if value == 0:
-		return "<><>"
+		return "<()>"
 	if value <= 5:
 		#For values less than or equal to four cannot be expressed more simply than n*"()" 
 		return "()" * value

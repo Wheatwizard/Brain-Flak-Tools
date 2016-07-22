@@ -9,7 +9,7 @@ This will return a list of zeros that are reducable
 
 def reducableZeros(snippet):
 	zeroData = zeroReturn(snippet)
-	return filter(lambda x: zeroData[x.span()[0]][0],re.finditer("[^\(\{<\[][\(<\[AB]*CC",snippet))
+	return filter(lambda x: zeroData[x.span()[0]][0],re.finditer("[^\(\{<\[][\(<\[AB]*<A>",snippet))
 
 '''
 zeroReduce makes pushing zeros to the stack more effective
@@ -27,7 +27,7 @@ def zeroReduce(snippet):
 		location = reducableZeros(snippet)[0].span()
 		start = findMatch(snippet,location[0])
 		snippet = (snippet[:start] +                        #Everything before the effected area
-		           snippet[location[0]+1:location[1]-2] +   #Everything between the first character and the "CC" (exclusive)
+		           snippet[location[0]+1:location[1]-3] +   #Everything between the first character and the "<A>" (exclusive)
 		           "<" +                                    #Open zeroer
 		           snippet[start:location[0]+1] +           #Everything between the first character and its match (inclusive)
 		           ">" +                                    #Close zeroer

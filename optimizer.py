@@ -19,7 +19,7 @@ def colorPrint(snippet):
 	print string
 
 def optimize(snippet):
-	size = len(snippet)
+	size = len(snippet.strip('\n'))
 	current = theorems.clean(snippet)
 	first = ""
 	colorPrint(current)

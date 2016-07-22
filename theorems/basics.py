@@ -100,7 +100,7 @@ def cleanup(snippet):
 		snippet = snippet.replace("<>","")
 		snippet = snippet.replace("[]","")
 	snippet = snippet.replace("{}","{A}")
-	snippet = snippet.replace("()","(CC)")
+	snippet = snippet.replace("()","(<A>)")
 	return snippet
 
 '''
