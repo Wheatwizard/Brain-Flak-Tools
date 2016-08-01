@@ -1,6 +1,68 @@
 from basics import *
 import re
 
+cache = {}
+
+def isTriangular(n):
+	#Triangles must be between sqrt(2n) and cbrt(2n)
+	for x in range(int((2*n)**(1/3.)),int((2*n)**.5)+1):
+		if (x**2+x) == 2*n:
+			return True
+	return False
+
+def getTriangle(n):
+	#Triangles must be between sqrt(2n) and cbrt(2n)
+	for x in range(int((2*n)**(1/3.)),int((2*n)**.5)+1):
+		if (x**2+x) == 2*n:
+			return x
+	#If we don't find one we made a mistake
+	assert False
+
+def isPrime(n):
+	return not [0 for x in range(2,int(n**.5)+1) if n%x==0] and n>1
+
+def getPrimeFactors(n):
+	return [x for x in range(2,n/2) if n%x==0 and isPrime(x)]
+
+def divHardcode(n,m):
+	assert n%m == 0
+	return "("*(m-1)+getBF(n/m)+")"*(m-1)+"{}"*(m-1)
+
+def getSimpleBF(n):
+	if n in cache:return cache[n]
+	if n < 0:
+		return "["+getSimpleBF(-n)+"]"
+	elif n == 0:
+		return ""
+	elif n < 6:
+		return "()"*n
+	else:
+		#Non-edge cases
+		solutions = []
+		if n >= 78 and isTriangular(n):
+			solutions.append("("+getBF(getTriangle(n))+"){({}[()])}{}")
+		if isPrime(n):
+			return getSimpleBF(n-1) + "()"
+		else:
+			solutions += map(lambda m:divHardcode(n,m),getPrimeFactors(n))
+			return min(solutions,key=len)
+
+def getBF(n):
+	if n in cache: return cache[n]
+	result = getSimpleBF(n)
+	index = n - 1
+	while index > n-(len(result)/2):
+		score = getSimpleBF(index)+getSimpleBF(n-index)
+		if len(score) < len(result):result = score
+		index -= 1
+	index = n + 1
+	while index < n+(len(result)/2):
+		score = getSimpleBF(index)+getSimpleBF(n-index)
+		if len(score) < len(result):result = score
+		index += 1
+	cache[n] = result
+	return result
+
 def getValue(snippet):
 	assert balanced(snippet)
 	while re.search("<",snippet):
@@ -15,69 +77,6 @@ def getValue(snippet):
 		elif atom[0] == "[" and atom[-1] == "]":
 			sum -= getValue(atom[1:-1])
 	return sum
-
-def factors(n):    
-	return reduce(list.__add__, ([x, n//x] for x in range(1, int(n**0.5) + 1) if n % x == 0))
-
-def getSimpleSequence(value):
-	if value < 0:
-		return "["+getSequence(-value)+"]"
-	if value == 0:
-		return "<()>"
-	if value <= 5:
-		#For values less than or equal to four cannot be expressed more simply than n*"()" 
-		return "()" * value
-	else:
-		multipliers = factors(value)[1:-1]
-		if multipliers != []:
-			#Composite numbers can be reduced by hard coded multiplication
-			form = lambda mul: ("("*(mul-1)+
-			                    getSequence(value/mul)+
-			                    ")"*(mul-1)+
-			                    "{}"*(mul-1)
-			                   )
-			snippets = map(form,multipliers)
-			return min(snippets, key = len)
-		else:
-			#Primes can get pretty long its best to just subtract one and take the hit
-			#It cannot get worse because worst case (actually impossible) every number smaller is prime
-			#In which case you just get n*"()"
-			#There might be room for optimization here
-			return getSimpleSequence(value-1) + "()"
-
-def getSequence(value):
-	if value < 0:
-		return "["+getSequence(-value)+"]"
-	if value == 0:
-		return "<()>"
-	if value <= 5:
-		#For values less than or equal to four cannot be expressed more simply than n*"()" 
-		return "()" * value
-	else:
-		#Simple sequence acts as the standard
-		simpleSequence = getSimpleSequence(value)
-		#Max depth marks the maximum depth before search is stopped
-		#Subtract five because the first five sequences are "()"*n
-		maxDepth = min(len(simpleSequence)/2 - 5, value)
-		depth = 0
-		#Go in the positive direction
-		while depth < maxDepth:
-			depth += 1
-			newSequence = getSimpleSequence(value-depth) + getSimpleSequence(depth)
-			if len(newSequence) < len(simpleSequence):
-				simpleSequence = newSequence
-				maxDepth = len(simpleSequence)/2 - 5 + depth
-		#Go in the negative direction
-		#Additional two allowed for negative "[ ]" monad
-		maxDepth = len(simpleSequence)/2 - 7
-		depth = 0
-		while depth < maxDepth:
-			depth += 1
-			newSequence = getSimpleSequence(value+depth) + "[" + getSimpleSequence(depth) + "]"
-			if len(newSequence) < len(simpleSequence):
-				simpleSequence = newSequence
-				maxDepth = len(simpleSequence)/2 - 7 + depth
-		return simpleSequence
 
 def substrings(snippet):
 	length = len(snippet)
@@ -101,7 +100,7 @@ def valueReduce(snippet):
 		possibilities = filter(lambda x:x!="",possibilities)
 		if possibilities != []:
 			largest = max(possibilities, key=len)
-			result += snippet[:location[1]].replace(largest, clean(getSequence(getValue(largest))))
+			result += snippet[:location[1]].replace(largest, clean(getBF(getValue(largest))))
 			snippet = snippet[location[1]:]
 		else:
 			result += snippet[:location[1]]
