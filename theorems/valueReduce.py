@@ -40,7 +40,7 @@ def getSimpleBF(n):
 		#Non-edge cases
 		solutions = []
 		if n >= 78 and isTriangular(n):
-			solutions.append("("+getBF(getTriangle(n))+"){({}[()])}{}")
+			solutions.append(min(["(("+getBF(getTriangle(n))+"){({}[()])}{})","("+getBF(getTriangle(n)+1)+")({({}[()])}{})"],key=len))
 		if isPrime(n):
 			return getSimpleBF(n-1) + "()"
 		else:
