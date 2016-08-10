@@ -1,6 +1,7 @@
 from valuePercolate import valuePercolate
 from swapPercolate import swapPercolate
 from modifierPercolate import modifierPercolate
+from pushPopPercolate import pushPopPercolate
 from swapElim import swapElim
 from valueElim import valueElim
 from modifierElim import modifierElim
@@ -25,5 +26,6 @@ theoremList = [
 	negativeReduce,
 	pushReduce,
 	zeroReduce,
-	valueReduce
+	valueReduce,
+	pushPopPercolate
 ]
