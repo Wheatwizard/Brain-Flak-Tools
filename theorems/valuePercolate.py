@@ -1,6 +1,6 @@
-from basics import *
+from .basics import *
 import re
-from valueReduce import substrings
+from .valueReduce import substrings
 
 def valuePercolate(snippet):
 	#TODO fix leapfrogging
@@ -16,7 +16,7 @@ def valuePercolate(snippet):
 		#sorts out the unbalanced ones
 		#returns the largest
 		possibilities = substrings(section)
-		possibilities = filter(balanced,possibilities)
+		possibilities = list(filter(balanced,possibilities))
 		if possibilities != []:
 			largest = max(possibilities, key=len)
 			sublocation = re.search(largest.replace("[","\[").replace("]","\]"), section).span()

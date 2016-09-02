@@ -1,4 +1,4 @@
-from basics import *
+from .basics import *
 import re
 
 '''
@@ -31,7 +31,7 @@ def topStack(snippet,start = "Unknown"):
 				current = result[-len(enclosed)]
 			else:
 				current = "Unknown"
-	return zip(result,snippet)
+	return list(zip(result,snippet))
 
 '''
 Doubly nested curly braces reduce to singly nested braces
@@ -98,6 +98,6 @@ if __name__ == "__main__":
 	e.g. ([]()) means non zero on the stack
 	e.g. (<><>)({}())  means non zero on the stack
 	'''
-	print loopReduce(clean("(()){(<><>)}"))   # --> (())(<><>)
-	print loopReduce(clean("(<()>){{}}"))     # --> (<()>)
-	print loopReduce(clean("([]()){(<><>)}")) # --> ([]())(<><>)
+	print(loopReduce(clean("(()){(<><>)}")))   # --> (())(<><>)
+	print(loopReduce(clean("(<()>){{}}")))     # --> (<()>)
+	print(loopReduce(clean("([]()){(<><>)}"))) # --> ([]())(<><>)

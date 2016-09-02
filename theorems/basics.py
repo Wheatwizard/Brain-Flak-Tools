@@ -19,7 +19,7 @@ def atomize(fragment):
 			currentScope = currentScope[:-2]
 		building += '\n' if currentScope == "" else ''
 	if currentScope != "":
-		print "Broken fragment or uneven braces"
+		print("Broken fragment or uneven braces")
 	return building[:-1]
 
 def complement(character):
@@ -93,7 +93,7 @@ def zeroReturn(string):
 		result.append(zeroed(stack))
 		if character in "({<[":
 			stack.append(character)
-	return zip(result,string)
+	return list(zip(result,string))
 
 def cleanup(snippet):
 	while re.search("(<>|\[\])",snippet):

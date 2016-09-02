@@ -1,4 +1,4 @@
-from basics import *
+from .basics import *
 import re
 
 '''
@@ -9,7 +9,7 @@ This will return a list of zeros that are reducable
 
 def reducableZeros(snippet):
 	zeroData = zeroReturn(snippet)
-	return filter(lambda x: zeroData[x.span()[0]][0],re.finditer("[^\(\{<\[][\(<\[AB]*<A>",snippet))
+	return [x for x in re.finditer("[^\(\{<\[][\(<\[AB]*<A>",snippet) if zeroData[x.span()[0]][0]]
 
 '''
 zeroReduce makes pushing zeros to the stack more effective
@@ -37,4 +37,4 @@ def zeroReduce(snippet):
 
 if __name__ == "__main__":
 	snippet = clean("<>(<><>)")
-	print zeroReduce(snippet)
+	print(zeroReduce(snippet))

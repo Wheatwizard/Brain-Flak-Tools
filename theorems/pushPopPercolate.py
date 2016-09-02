@@ -1,5 +1,5 @@
 import re
-from basics import *
+from .basics import *
 
 '''
 Find all of the matches that are reducable
@@ -21,7 +21,7 @@ def percolablePushPops(snippet):
 		and
 		balanced(selec(x)[bSize(x)+1:-2*bSize(x)-1])
 	)
-	return filter(valid,matches)
+	return list(filter(valid,matches))
 
 
 def pushPopPercolate(snippet):
@@ -33,4 +33,4 @@ def pushPopPercolate(snippet):
 	return snippet
 
 if __name__ == "__main__":
-	print pushPopPercolate("[((((((AAAAA))))))BBBBBBB]")
+	print(pushPopPercolate("[((((((AAAAA))))))BBBBBBB]"))
