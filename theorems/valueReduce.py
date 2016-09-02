@@ -1,4 +1,4 @@
-from basics import *
+from .basics import *
 import re
 
 cache = {}
@@ -44,7 +44,7 @@ def getSimpleBF(n):
 		if isPrime(n):
 			return getSimpleBF(n-1) + "()"
 		else:
-			solutions += map(lambda m:divHardcode(n,m),getPrimeFactors(n))
+			solutions += [divHardcode(n,m) for m in getPrimeFactors(n)]
 			return min(solutions,key=len)
 
 def getBF(n):
@@ -69,7 +69,7 @@ def getValue(snippet):
 		location = re.search("<",snippet).span()
 		snippet = snippet[:location[0]] + snippet[findMatch(snippet,location[0])+1:]
 	snippet = snippet.replace("A","()")
-	atoms = filter(lambda x:x!="",atomize(snippet).split("\n"))
+	atoms = [x for x in atomize(snippet).split("\n") if x!=""]
 	sum = 0
 	for atom in atoms:
 		if atom == "()":
@@ -80,7 +80,7 @@ def getValue(snippet):
 
 def substrings(snippet):
 	length = len(snippet)
-	return [snippet[i:j+1] for i in xrange(length) for j in xrange(i,length)]
+	return [snippet[i:j+1] for i in range(length) for j in range(i,length)]
 
 def valueReduce(snippet):
 	result = ""
@@ -95,9 +95,9 @@ def valueReduce(snippet):
 		#sorts out the unbalanced ones
 		#returns the largest
 		possibilities = substrings(section)
-		possibilities = filter(balanced,possibilities)
+		possibilities = list(filter(balanced,possibilities))
 		#Filter out empty strings
-		possibilities = filter(lambda x:x!="",possibilities)
+		possibilities = [x for x in possibilities if x!=""]
 		if possibilities != []:
 			largest = max(possibilities, key=len)
 			result += snippet[:location[1]].replace(largest, clean(getBF(getValue(largest))))
@@ -108,4 +108,4 @@ def valueReduce(snippet):
 	return result + snippet
 
 if __name__ == "__main__":
-	print valueReduce("[{}AAAA[AAAAA]]AAAAA")
+	print(valueReduce("[{}AAAA[AAAAA]]AAAAA"))

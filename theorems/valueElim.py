@@ -1,5 +1,6 @@
-from basics import *
+from .basics import *
 import re
+from functools import reduce
 
 def valueElim(snippet):
 	snippet = snippet.replace("(B)","E")

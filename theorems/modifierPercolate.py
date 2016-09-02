@@ -1,5 +1,5 @@
 import re
-from basics import *
+from .basics import *
 
 '''
 Modifiers applied to all terms of a loop can be applied to the loop as a whole
@@ -26,5 +26,5 @@ def modifierPercolate(snippet):
 	return result + snippet
 
 if __name__ == "__main__":
-	print modifierPercolate(clean("{<{}{}>}"))
-	print modifierPercolate(clean("{<{}><{}>}"))
+	print(modifierPercolate(clean("{<{}{}>}")))
+	print(modifierPercolate(clean("{<{}><{}>}")))

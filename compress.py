@@ -4,8 +4,8 @@ import re
 if __name__ == "__main__":
 	commandLineArgs = sys.argv
 	if len(commandLineArgs) != 3:
-		print "Please pass a input and output file."
-		print "(Example: python %s input.txt output.txt)" %commandLineArgs[0]
+		print("Please pass a input and output file.")
+		print("(Example: python %s input.txt output.txt)" %commandLineArgs[0])
 		exit()
 	#Open first file replace whitespace and write to second file
 	#Open files

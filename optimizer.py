@@ -16,7 +16,7 @@ def colorPrint(snippet):
 	string = string.replace("B","{}")
 	string = string.replace("C","<>")
 	string = string.replace("D","[]")
-	print string
+	print(string)
 
 def optimize(snippet):
 	size = len(snippet.strip('\n'))
@@ -29,19 +29,19 @@ def optimize(snippet):
 		for theorem in theorems.theoremList:
 			current = theorem(current)
 			if current != last:
-				print theorem
+				print(theorem)
 				assert theorems.balanced(current)
 				colorPrint(current)
 				last = current
 	current = theorems.flesh(current)
-	print "Code reduced from %d bytes to %d bytes" %(size,len(current))
+	print("Code reduced from %d bytes to %d bytes" %(size,len(current)))
 	return current
 
 if __name__ == "__main__":
 	commandLineArgs = sys.argv
 	if len(commandLineArgs) != 3:
-		print "Please pass a input and output file."
-		print "(Example: python %s input.txt output.txt)" %commandLineArgs[0]
+		print("Please pass a input and output file.")
+		print("(Example: python %s input.txt output.txt)" %commandLineArgs[0])
 		exit()
 	#Open first file replace whitespace and write to second file
 	#Open files

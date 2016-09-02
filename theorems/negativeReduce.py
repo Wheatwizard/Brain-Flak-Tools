@@ -1,4 +1,4 @@
-from basics import *
+from .basics import *
 import re
 
 '''
@@ -9,7 +9,7 @@ def reducableNegatives(snippet):
 	matches = re.finditer("\[[^\[]*\[",snippet)
 	#Matches that are balanced between the "["s are reduceable
 	valid = lambda x: balanced(snippet[x.span()[0]+1:x.span()[1]-1])
-	return filter(valid,matches)
+	return list(filter(valid,matches))
 
 '''
 NegativeReduce cancels out negative modifiers
@@ -36,5 +36,5 @@ def negativeReduce(snippet):
 	return cleanup(snippet)
 
 if __name__ == "__main__":
-	print negativeReduce(clean("[()[()[()]()]()]"))
-	print negativeReduce(clean("[()[()[()]]]"))
+	print(negativeReduce(clean("[()[()[()]()]()]")))
+	print(negativeReduce(clean("[()[()[()]]]")))
