@@ -1,7 +1,7 @@
 from basics import *
 import re
 
-cache = {}
+cache = {0:"<()>"}
 
 def isTriangular(n):
 	#Triangles must be between sqrt(2n) and cbrt(2n)
@@ -65,27 +65,43 @@ def getBF(n):
 
 def getValue(snippet):
 	assert balanced(snippet)
-	while re.search("<",snippet):
-		location = re.search("<",snippet).span()
-		snippet = snippet[:location[0]] + snippet[findMatch(snippet,location[0])+1:]
-	snippet = snippet.replace("A","()")
-	atoms = filter(lambda x:x!="",atomize(snippet).split("\n"))
-	sum = 0
-	for atom in atoms:
-		if atom == "()":
-			sum += 1
-		elif atom[0] == "[" and atom[-1] == "]":
-			sum -= getValue(atom[1:-1])
-	return sum
+	#Mini interpreter
+	stack = []
+	scope = [0]
+	for character in snippet:
+		if character in "([<":
+			scope.append(0)
+		elif character == ")":
+			stack.append(scope.pop())
+			scope[-1] += stack[-1]
+		elif character == "]":
+			scope[-1] = -scope.pop() + scope[-1]
+		elif character == ">":
+			scope.pop()
+		elif character == "B":
+			scope[-1] += stack.pop()
+		else: #character == "A"
+			scope[-1] += 1
+	assert(len(scope) == 1)
+	assert(stack == [])
+	return scope[0]
 
 def substrings(snippet):
 	length = len(snippet)
 	return [snippet[i:j+1] for i in xrange(length) for j in xrange(i,length)]
 
+def pushPopStackSafe(snippet):
+	height = 0
+	for character in snippet:
+		height += (character == ")") - (character == "B")
+		if height < 0: return False
+	return height == 0
+
 def valueReduce(snippet):
 	result = ""
-	while re.search("[A\[\]<>]{2,}",snippet):
-		location = re.search("[A\[\]<>]{2,}",snippet).span()
+	matchExpression = "[A\[(<][AB[\]<>()]*[AB\]>]"
+	while re.search(matchExpression,snippet):
+		location = re.search(matchExpression,snippet).span()
 		section = snippet[location[0]:location[1]]
 		#Theres got to be a better way to do this
 		#I am really tired right now and I'll fix it later
@@ -95,9 +111,7 @@ def valueReduce(snippet):
 		#sorts out the unbalanced ones
 		#returns the largest
 		possibilities = substrings(section)
-		possibilities = filter(balanced,possibilities)
-		#Filter out empty strings
-		possibilities = filter(lambda x:x!="",possibilities)
+		possibilities = filter(lambda x: len(x) > 0 and balanced(x) and pushPopStackSafe(x),possibilities)
 		if possibilities != []:
 			largest = max(possibilities, key=len)
 			result += snippet[:location[1]].replace(largest, clean(getBF(getValue(largest))))
@@ -108,4 +122,15 @@ def valueReduce(snippet):
 	return result + snippet
 
 if __name__ == "__main__":
-	print valueReduce("[{}AAAA[AAAAA]]AAAAA")
+	print "CAAA"
+	print valueReduce("CAAA")
+	print "CAAAC"
+	print valueReduce("CAAAC")
+	print "(AAA)B"
+	print valueReduce("(AAA)B")
+	print "((AAA)B)"
+	print valueReduce("((AAA)B)")
+	print "[((AA)B)B]"
+	print valueReduce("[((AA)B)B]")
+	print "(AAA)(B)B"
+	print valueReduce("(AAA)(B)B")
