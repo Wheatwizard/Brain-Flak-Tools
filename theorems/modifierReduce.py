@@ -1,4 +1,4 @@
-from basics import *
+from .basics import *
 import re
 
 #TODO comment this unreadable grabage for godsakes
@@ -7,14 +7,10 @@ def reducableModifiers(snippet):
 	basicFinder = "(\[<.*>\]|<\[.*\]>)" #The pattern we care about
 	finder = re.compile("(?=" + basicFinder +  ").") #Matches the first character of any matches to the pattern
 	matches = re.finditer(finder, snippet)
-	matches = filter(
-		#Let the code through if the start to the end matches the pattern
-		lambda x:re.match(
+	matches = [x for x in matches if re.match(
 			basicFinder + "$",
 			snippet[x.span()[0]:findMatch(snippet,x.span()[0])+1]
-		),
-		matches
-	)
+		)]
 	return matches
 
 def modifierReduce(snippet):
@@ -31,4 +27,4 @@ def modifierReduce(snippet):
 	return snippet
 
 if __name__ == "__main__":
-	print modifierReduce(clean("(<[()<{}[()]>]>)"))
+	print(modifierReduce(clean("(<[()<{}[()]>]>)")))

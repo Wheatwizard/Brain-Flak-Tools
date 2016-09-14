@@ -1,4 +1,4 @@
-from basics import *
+from .basics import *
 import re
 
 cache = {0:"<()>"}
@@ -44,7 +44,7 @@ def getSimpleBF(n):
 		if isPrime(n):
 			return getSimpleBF(n-1) + "()"
 		else:
-			solutions += map(lambda m:divHardcode(n,m),getPrimeFactors(n))
+			solutions += [divHardcode(n,m) for m in getPrimeFactors(n)]
 			return min(solutions,key=len)
 
 def getBF(n):
@@ -88,7 +88,7 @@ def getValue(snippet):
 
 def substrings(snippet):
 	length = len(snippet)
-	return [snippet[i:j+1] for i in xrange(length) for j in xrange(i,length)]
+	return [snippet[i:j+1] for i in range(length) for j in range(i,length)]
 
 def pushPopStackSafe(snippet):
 	height = 0
@@ -111,7 +111,7 @@ def valueReduce(snippet):
 		#sorts out the unbalanced ones
 		#returns the largest
 		possibilities = substrings(section)
-		possibilities = filter(lambda x: len(x) > 0 and balanced(x) and pushPopStackSafe(x),possibilities)
+		possibilities = list(filter(lambda x: len(x) > 0 and balanced(x) and pushPopStackSafe(x),possibilities))
 		if possibilities != []:
 			largest = max(possibilities, key=len)
 			result += snippet[:location[1]].replace(largest, clean(getBF(getValue(largest))))
@@ -122,15 +122,4 @@ def valueReduce(snippet):
 	return result + snippet
 
 if __name__ == "__main__":
-	print "CAAA"
-	print valueReduce("CAAA")
-	print "CAAAC"
-	print valueReduce("CAAAC")
-	print "(AAA)B"
-	print valueReduce("(AAA)B")
-	print "((AAA)B)"
-	print valueReduce("((AAA)B)")
-	print "[((AA)B)B]"
-	print valueReduce("[((AA)B)B]")
-	print "(AAA)(B)B"
-	print valueReduce("(AAA)(B)B")
+	print(valueReduce("[{}AAAA[AAAAA]]AAAAA"))

@@ -33,7 +33,7 @@ def atomize(fragment):
 			currentScope = currentScope[:-2]
 		building += '\n' if currentScope == "" else ''
 	if currentScope != "":
-		print "Broken fragment or uneven braces"
+		print("Broken fragment or uneven braces")
 	return building[:-1]
 
 def unpack(code, indenter):
@@ -78,8 +78,8 @@ def unpack(code, indenter):
 if __name__ == "__main__":
 	commandLineArgs = sys.argv
 	if len(commandLineArgs) != 3:
-		print "Please pass a input and output file."
-		print "(Example: python %s input.txt output.txt)" %commandLineArgs[0]
+		print("Please pass a input and output file.")
+		print("(Example: python %s input.txt output.txt)" %commandLineArgs[0])
 		exit()
 	#Open files
 	infile = open(commandLineArgs[1])

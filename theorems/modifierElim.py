@@ -1,5 +1,6 @@
-from basics import *
+from .basics import *
 import re
+from functools import reduce
 
 '''
 reducableModifiers finds all the modifiers (it can) attempting to modify a zeroed value
@@ -8,11 +9,7 @@ reducableModifiers finds all the modifiers (it can) attempting to modify a zeroe
 def reducableModifiers(snippet):
 	#Regex for all modifiers, filter out the unbalanced matches, and filter out the irreducable matches
 	pattern = "<" #Matches the opening brace for a "<>" or "[]" monad
-	return filter(
-		#If the code from the open to its match is nonzero it is filtered out
-		lambda x:zeroEval(snippet[x.span()[0]+1:findMatch(snippet,x.span()[0])]),
-		re.finditer(pattern,snippet)
-	)
+	return [x for x in re.finditer(pattern,snippet) if zeroEval(snippet[x.span()[0]+1:findMatch(snippet,x.span()[0])])]
 
 '''
 ModifierElim removes value modifiers ("<>" and "[]") that serve no purpose
@@ -43,4 +40,4 @@ def modifierElim(snippet):
  	return snippet
 
 if __name__ == "__main__":
-	print modifierElim(clean("(<(<(<>)>())>)"))
+	print(modifierElim(clean("(<(<(<>)>())>)")))
