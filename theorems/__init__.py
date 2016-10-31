@@ -2,6 +2,7 @@ from .valuePercolate import valuePercolate
 from .swapPercolate import swapPercolate
 from .modifierPercolate import modifierPercolate
 from .pushPopPercolate import pushPopPercolate
+from .zeroPercolate import zeroPercolate
 from .swapElim import swapElim
 from .valueElim import valueElim
 from .modifierElim import modifierElim
@@ -27,5 +28,6 @@ theoremList = [
 	pushReduce,
 	zeroReduce,
 	valueReduce,
-	pushPopPercolate
+	pushPopPercolate,
+	zeroPercolate
 ]
